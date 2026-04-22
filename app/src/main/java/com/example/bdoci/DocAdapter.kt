@@ -9,7 +9,13 @@ import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bdoci.models.Doc
 
-class DocAdapter(private val docList: List<Doc>) : RecyclerView.Adapter<DocAdapter.DocViewHolder>() {
+class DocAdapter(private var docList: List<Doc>) : RecyclerView.Adapter<DocAdapter.DocViewHolder>() {
+
+    // ADD THIS NEW FUNCTION to handle search updates
+    fun updateData(newList: List<Doc>) {
+        docList = newList
+        notifyDataSetChanged() // This tells the RecyclerView to refresh the screen
+    }
 
     // This creates the visual view for a single item
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DocViewHolder {

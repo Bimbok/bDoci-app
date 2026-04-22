@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -52,6 +53,14 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation("androidx.activity:activity-ktx:1.9.3")
+    val room_version = "2.7.0-alpha11"
+    implementation("androidx.room:room-runtime:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
+    // For Kotlin use kapt or ksp. Since the project uses Kotlin, let's use ksp if possible or just kapt.
+    // Checking plugins for ksp... not found. Let's use kapt.
+    // Wait, I should check if kapt is already there or if I should add it.
+    // I'll add kapt plugin and the dependency.
     implementation(libs.androidx.constraintlayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

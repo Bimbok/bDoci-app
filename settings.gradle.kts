@@ -3,8 +3,10 @@ pluginManagement {
         google {
             content {
                 includeGroupByRegex("com\\.android.*")
-                includeGroupByRegex("com\\.google.*")
+                includeGroupByRegex("com\\.google\\.android.*")
                 includeGroupByRegex("androidx.*")
+                includeGroup("com.google.firebase")
+                includeGroup("com.google.gms")
             }
         }
         mavenCentral()

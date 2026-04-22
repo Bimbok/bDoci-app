@@ -9,6 +9,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
+import android.graphics.Color
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.style.ForegroundColorSpan
+import java.util.regex.Pattern
+
+import android.content.ClipboardManager
+import android.content.Context
+import android.widget.Toast
+import com.google.android.material.button.MaterialButton
+
 class DocDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,6 +41,16 @@ class DocDetailActivity : AppCompatActivity() {
         val descText = findViewById<TextView>(R.id.detailDescription)
         val codeText = findViewById<TextView>(R.id.detailCode)
         val codeContainer = findViewById<LinearLayout>(R.id.codeContainer)
+        val codeHeader = findViewById<View>(R.id.codeHeader)
+        val codeScroll = findViewById<View>(R.id.codeScroll)
+        val btnCopyCode = findViewById<MaterialButton>(R.id.btnCopyCode)
+        val toolbar = findViewById<com.google.android.material.appbar.MaterialToolbar>(R.id.toolbar)
+
+        // Setup Toolbar
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.title = "" // Keep it clean
+        toolbar.setNavigationOnClickListener { finish() }
 
         // Extract the data passed from the Intent
         val title = intent.getStringExtra("EXTRA_TITLE")
@@ -42,12 +63,52 @@ class DocDetailActivity : AppCompatActivity() {
         categoryText.text = category?.uppercase()
         descText.text = description
 
-        // If code exists, show it. Otherwise, hide the black box.
+        // If code exists, show it with syntax highlighting.
         if (!code.isNullOrBlank()) {
-            codeText.text = code
-            codeContainer.visibility = View.VISIBLE
+            codeText.text = highlightCode(code)
+            codeHeader.visibility = View.VISIBLE
+            codeScroll.visibility = View.VISIBLE
+
+            btnCopyCode.setOnClickListener {
+                val clipboard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clip = android.content.ClipData.newPlainText("Code", code)
+                clipboard.setPrimaryClip(clip)
+                Toast.makeText(this, "Code copied to clipboard", Toast.LENGTH_SHORT).show()
+            }
         } else {
-            codeContainer.visibility = View.GONE
+            codeHeader.visibility = View.GONE
+            codeScroll.visibility = View.GONE
+        }
+    }
+
+    private fun highlightCode(code: String): Spannable {
+        val spannable = SpannableString(code)
+
+        // Basic Highlight Rules (Regex)
+        val keywords = Pattern.compile("\\b(val|var|fun|class|interface|object|if|else|when|for|while|return|import|package|null|true|false)\\b")
+        val types = Pattern.compile("\\b(String|Int|Boolean|Long|Float|Double|Any|Unit|List|Map|Set)\\b")
+        val strings = Pattern.compile("\".*?\"")
+        val comments = Pattern.compile("//.*|/\\*.*?\\*/", Pattern.DOTALL)
+        val numbers = Pattern.compile("\\b\\d+\\b")
+
+        applySpan(spannable, keywords, Color.parseColor("#FF7B72")) // Reddish
+        applySpan(spannable, types, Color.parseColor("#D2A8FF"))    // Purple
+        applySpan(spannable, strings, Color.parseColor("#A5D6FF"))  // Blue
+        applySpan(spannable, comments, Color.parseColor("#8B949E")) // Grey
+        applySpan(spannable, numbers, Color.parseColor("#D2A8FF"))  // Purple
+
+        return spannable
+    }
+
+    private fun applySpan(spannable: Spannable, pattern: Pattern, color: Int) {
+        val matcher = pattern.matcher(spannable)
+        while (matcher.find()) {
+            spannable.setSpan(
+                ForegroundColorSpan(color),
+                matcher.start(),
+                matcher.end(),
+                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+            )
         }
     }
 }

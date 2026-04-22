@@ -21,6 +21,9 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 
+import androidx.activity.viewModels
+import com.example.bdoci.viewmodels.DocViewModel
+
 class Dashboard : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
@@ -28,8 +31,7 @@ class Dashboard : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
     private lateinit var docAdapter: DocAdapter
 
-    // We keep a copy of the full list so we don't lose data when filtering
-    private var fullDocumentList: List<Doc> = emptyList()
+    private val viewModel: DocViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,74 +51,44 @@ class Dashboard : AppCompatActivity() {
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        // Setup the search bar listener
+        // Observe ViewModel
+        setupObservers()
+
+        // Setup search
         setupSearch()
 
-        // Fetch the data
-        fetchDataFromBackend()
+        // Trigger fetch (it only fetches if data is empty)
+        viewModel.fetchDocuments()
+    }
+
+    private fun setupObservers() {
+        viewModel.documents.observe(this) { documents ->
+            if (::docAdapter.isInitialized) {
+                docAdapter.updateData(documents)
+            } else {
+                docAdapter = DocAdapter(documents)
+                recyclerView.adapter = docAdapter
+            }
+        }
+
+        viewModel.isLoading.observe(this) { isLoading ->
+            progressBar.visibility = if (isLoading) View.VISIBLE else View.GONE
+        }
+
+        viewModel.errorMessage.observe(this) { message ->
+            message?.let {
+                Toast.makeText(this, it, Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     private fun setupSearch() {
         searchBar.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-
-            // This runs every time a letter is typed or deleted
             override fun afterTextChanged(s: Editable?) {
-                val searchText = s.toString().trim()
-
-                // Filter the master list based on the title
-                val filteredList = fullDocumentList.filter { doc ->
-                    doc.title.contains(searchText, ignoreCase = true)
-                }
-
-                // Send the new filtered list to the adapter
-                if (::docAdapter.isInitialized) {
-                    docAdapter.updateData(filteredList)
-                }
+                viewModel.filterDocuments(s.toString().trim())
             }
         })
-    }
-
-    private fun fetchDataFromBackend() {
-        // 1. Show the loading spinner before fetching
-        progressBar.visibility = View.VISIBLE
-
-        lifecycleScope.launch(Dispatchers.IO) {
-            try {
-                val documents = ApiClient.apiService.getAllDocs()
-
-                withContext(Dispatchers.Main) {
-                    // 2. Hide the spinner when successful
-                    progressBar.visibility = View.GONE
-
-                    // Save to our master list
-                    fullDocumentList = documents
-
-                    // Initialize the adapter and set it
-                    docAdapter = DocAdapter(documents)
-                    recyclerView.adapter = docAdapter
-                }
-            } catch (e: HttpException) {
-                withContext(Dispatchers.Main) {
-                    // Hide spinner on error
-                    progressBar.visibility = View.GONE
-                    val code = e.code()
-                    val message = when (code) {
-                        429 -> "Too Many Requests (Rate Limited)"
-                        else -> "Server error: $code"
-                    }
-                    Toast.makeText(this@Dashboard, message, Toast.LENGTH_LONG).show()
-                    e.printStackTrace()
-                }
-            } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                    // Hide spinner on error
-                    progressBar.visibility = View.GONE
-                    Toast.makeText(this@Dashboard, "Failed to load data: ${e.message}", Toast.LENGTH_LONG).show()
-                    e.printStackTrace()
-                }
-            }
-        }
     }
 }

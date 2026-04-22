@@ -26,20 +26,22 @@ class DocAdapter(private val docList: List<Doc>) : RecyclerView.Adapter<DocAdapt
     override fun onBindViewHolder(holder: DocViewHolder, position: Int) {
         val currentDoc = docList[position]
 
-        // Set the title
         holder.titleText.text = currentDoc.title
-
-        // Step 3: Process the "Small Portion of the Description"
         holder.descText.text = getShortDescription(currentDoc.document)
 
-        // Step 5: Setup the Button
         holder.readMoreButton.setOnClickListener {
-            // Right now, just show a popup. Later we will open a new page!
-            Toast.makeText(
-                holder.itemView.context,
-                "Will open full view for: ${currentDoc.title}",
-                Toast.LENGTH_SHORT
-            ).show()
+            // Create an Intent to open DocDetailActivity
+            val context = holder.itemView.context
+            val intent = android.content.Intent(context, DocDetailActivity::class.java)
+
+            // Pack the data into the Intent payload
+            intent.putExtra("EXTRA_TITLE", currentDoc.title)
+            intent.putExtra("EXTRA_CATEGORY", currentDoc.category)
+            intent.putExtra("EXTRA_DOCUMENT", currentDoc.document)
+            intent.putExtra("EXTRA_CODE", currentDoc.code)
+
+            // Launch the new screen!
+            context.startActivity(intent)
         }
     }
 

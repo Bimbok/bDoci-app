@@ -18,6 +18,9 @@ class DocViewModel(private val repository: DocRepository) : ViewModel() {
     private val _documents = MutableStateFlow<List<Doc>>(emptyList())
     val documents: StateFlow<List<Doc>> = _documents
 
+    private val _categories = MutableStateFlow<List<String>>(emptyList())
+    val categories: StateFlow<List<String>> = _categories
+
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading
 
@@ -26,6 +29,10 @@ class DocViewModel(private val repository: DocRepository) : ViewModel() {
 
     // Keep a full copy for filtering
     private var fullList: List<Doc> = emptyList()
+    
+    // Track current filter state
+    private var currentQuery: String = ""
+    private var currentCategory: String = "All"
 
     fun fetchDocuments() {
         _isLoading.value = true
@@ -37,8 +44,8 @@ class DocViewModel(private val repository: DocRepository) : ViewModel() {
                 val localDocs = repository.getLocalDocs()
                 if (localDocs.isNotEmpty()) {
                     fullList = localDocs
-                    _documents.value = localDocs
-                    // We don't stop loading here as we want to refresh from network
+                    _categories.value = localDocs.map { it.category }.distinct().sorted()
+                    applyFilters()
                 }
 
                 // 2. Refresh from network in background
@@ -47,7 +54,8 @@ class DocViewModel(private val repository: DocRepository) : ViewModel() {
                 // 3. Update with fresh data from local database
                 val freshDocs = repository.getLocalDocs()
                 fullList = freshDocs
-                _documents.value = freshDocs
+                _categories.value = freshDocs.map { it.category }.distinct().sorted()
+                applyFilters()
                 _isLoading.value = false
             } catch (e: HttpException) {
                 _isLoading.value = false
@@ -68,11 +76,31 @@ class DocViewModel(private val repository: DocRepository) : ViewModel() {
     }
 
     fun filterDocuments(query: String) {
-        val filtered = if (query.isEmpty()) {
-            fullList
-        } else {
-            fullList.filter { it.title.contains(query, ignoreCase = true) || it.category.contains(query, ignoreCase = true) }
+        currentQuery = query
+        applyFilters()
+    }
+
+    fun filterByCategory(category: String) {
+        currentCategory = category
+        applyFilters()
+    }
+
+    private fun applyFilters() {
+        var filtered = fullList
+
+        // 1. Apply category filter
+        if (currentCategory != "All") {
+            filtered = filtered.filter { it.category == currentCategory }
         }
+
+        // 2. Apply search query filter
+        if (currentQuery.isNotEmpty()) {
+            filtered = filtered.filter { 
+                it.title.contains(currentQuery, ignoreCase = true) || 
+                it.category.contains(currentQuery, ignoreCase = true) 
+            }
+        }
+
         _documents.value = filtered
     }
 

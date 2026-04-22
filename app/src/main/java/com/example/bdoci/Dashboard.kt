@@ -27,8 +27,17 @@ import retrofit2.HttpException
 import androidx.activity.viewModels
 import com.example.bdoci.viewmodels.DocViewModel
 import com.example.bdoci.utils.NetworkUtils
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.navigation.NavigationView
+import android.widget.ImageButton
+import androidx.core.view.GravityCompat
 
 class Dashboard : AppCompatActivity() {
+
+    private lateinit var drawerLayout: DrawerLayout
+    private lateinit var navigationView: NavigationView
+    private lateinit var categoryRecyclerView: RecyclerView
+    private lateinit var categoryAdapter: CategoryAdapter
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var searchBar: EditText
@@ -51,14 +60,30 @@ class Dashboard : AppCompatActivity() {
         }
 
         // Initialize UI Elements
+        drawerLayout = findViewById(R.id.drawerLayout)
+        navigationView = findViewById(R.id.navigationView)
+        categoryRecyclerView = findViewById(R.id.categoryRecyclerView)
+        
         recyclerView = findViewById(R.id.recyclerView)
         searchBar = findViewById(R.id.searchBar)
         progressBar = findViewById(R.id.progressBar)
         offlineIndicator = findViewById(R.id.offlineIndicator)
 
+        val hamburgerMenu: ImageButton = findViewById(R.id.hamburgerMenu)
+        hamburgerMenu.setOnClickListener {
+            drawerLayout.openDrawer(GravityCompat.END)
+        }
+
         networkUtils = NetworkUtils(this)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
+        categoryRecyclerView.layoutManager = LinearLayoutManager(this)
+        
+        categoryAdapter = CategoryAdapter(emptyList()) { category ->
+            viewModel.filterByCategory(category)
+            drawerLayout.closeDrawer(GravityCompat.END)
+        }
+        categoryRecyclerView.adapter = categoryAdapter
 
         // Observe ViewModel
         setupObservers()
@@ -95,6 +120,12 @@ class Dashboard : AppCompatActivity() {
                         message?.let {
                             Toast.makeText(this@Dashboard, it, Toast.LENGTH_LONG).show()
                         }
+                    }
+                }
+
+                launch {
+                    viewModel.categories.collect { categories ->
+                        categoryAdapter.updateCategories(categories)
                     }
                 }
 

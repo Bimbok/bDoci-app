@@ -40,6 +40,18 @@ Moving away from the harsh glaring whites of standard Material Design, bDoci uti
 
 ---
 
+## 📸 Sample Screens
+
+<p align="center">
+  <img src="Sample/Screenshot_20260422_215212_bDoci.jpg" alt="bDoci dashboard screen" width="220" />
+  <img src="Sample/Screenshot_20260422_215224_bDoci.jpg" alt="bDoci category filter screen" width="220" />
+  <img src="Sample/Screenshot_20260422_215236_bDoci.jpg" alt="bDoci documentation detail screen" width="220" />
+  <img src="Sample/Screenshot_20260422_215245_bDoci.jpg" alt="bDoci QR sharing screen" width="220" />
+  <img src="Sample/Screenshot_20260422_215254_bDoci.jpg" alt="bDoci code viewer screen" width="220" />
+</p>
+
+---
+
 ## 🛠️ Tech Stack & Engineering
 
 bDoci strictly adheres to the **MVVM (Model-View-ViewModel)** architectural pattern, ensuring clean separation of concerns, testability, and a crash-free, lifecycle-aware UI.

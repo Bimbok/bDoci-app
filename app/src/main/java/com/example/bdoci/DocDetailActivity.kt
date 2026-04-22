@@ -19,6 +19,10 @@ import android.content.ClipboardManager
 import android.content.Context
 import android.widget.Toast
 import com.google.android.material.button.MaterialButton
+import com.example.bdoci.models.Doc
+import com.example.bdoci.utils.QRUtils
+import android.widget.ImageView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 
 class DocDetailActivity : AppCompatActivity() {
 
@@ -44,6 +48,7 @@ class DocDetailActivity : AppCompatActivity() {
         val codeHeader = findViewById<View>(R.id.codeHeader)
         val codeScroll = findViewById<View>(R.id.codeScroll)
         val btnCopyCode = findViewById<MaterialButton>(R.id.btnCopyCode)
+        val btnShareQR = findViewById<MaterialButton>(R.id.btnShareQR)
         val toolbar = findViewById<com.google.android.material.appbar.MaterialToolbar>(R.id.toolbar)
 
         // Setup Toolbar
@@ -53,10 +58,17 @@ class DocDetailActivity : AppCompatActivity() {
         toolbar.setNavigationOnClickListener { finish() }
 
         // Extract the data passed from the Intent
-        val title = intent.getStringExtra("EXTRA_TITLE")
-        val category = intent.getStringExtra("EXTRA_CATEGORY")
-        val description = intent.getStringExtra("EXTRA_DOCUMENT")
+        val id = intent.getStringExtra("EXTRA_ID") ?: ""
+        val title = intent.getStringExtra("EXTRA_TITLE") ?: ""
+        val category = intent.getStringExtra("EXTRA_CATEGORY") ?: ""
+        val description = intent.getStringExtra("EXTRA_DOCUMENT") ?: ""
         val code = intent.getStringExtra("EXTRA_CODE")
+
+        val currentDoc = Doc(id, title, description, code, category)
+
+        btnShareQR.setOnClickListener {
+            showQRCodeDialog(currentDoc)
+        }
 
         // Set the data to the views
         titleText.text = title
@@ -78,6 +90,36 @@ class DocDetailActivity : AppCompatActivity() {
         } else {
             codeHeader.visibility = View.GONE
             codeScroll.visibility = View.GONE
+        }
+    }
+
+    private fun showQRCodeDialog(doc: Doc) {
+        val payload = QRUtils.encodeDocToBase64(doc)
+        val uri = "bdoci://share?payload=$payload"
+
+        // QR Code max capacity is ~3KB. If it's too large, notify the user.
+        if (uri.length > 2900) {
+            MaterialAlertDialogBuilder(this)
+                .setTitle("Document Too Large")
+                .setMessage("This document is too large to share via QR code. Try reducing the content.")
+                .setPositiveButton("OK", null)
+                .show()
+            return
+        }
+
+        val bitmap = QRUtils.generateQRCode(uri)
+
+        if (bitmap != null) {
+            val dialogView = layoutInflater.inflate(R.layout.dialog_qr_code, null)
+            val qrImageView = dialogView.findViewById<ImageView>(R.id.qrImageView)
+            qrImageView.setImageBitmap(bitmap)
+
+            MaterialAlertDialogBuilder(this)
+                .setView(dialogView)
+                .setPositiveButton("Close", null)
+                .show()
+        } else {
+            Toast.makeText(this, "Failed to generate QR code", Toast.LENGTH_SHORT).show()
         }
     }
 

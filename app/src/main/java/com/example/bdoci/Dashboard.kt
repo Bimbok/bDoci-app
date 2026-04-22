@@ -32,6 +32,9 @@ import com.google.android.material.navigation.NavigationView
 import android.widget.ImageButton
 import androidx.core.view.GravityCompat
 
+import android.content.Intent
+import com.example.bdoci.utils.QRUtils
+
 class Dashboard : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
@@ -93,6 +96,30 @@ class Dashboard : AppCompatActivity() {
 
         // Trigger fetch (it only fetches if data is empty)
         viewModel.fetchDocuments()
+
+        // Handle deep link
+        handleDeepLink(intent)
+    }
+
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        handleDeepLink(intent)
+    }
+
+    private fun handleDeepLink(intent: Intent?) {
+        val data = intent?.data
+        if (data != null && data.scheme == "bdoci" && data.host == "share") {
+            val payload = data.getQueryParameter("payload")
+            if (payload != null) {
+                val doc = QRUtils.decodeBase64ToDoc(payload)
+                if (doc != null) {
+                    viewModel.importDocument(doc)
+                    Toast.makeText(this, "Importing: ${doc.title}", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, "Invalid document data", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     private fun setupObservers() {

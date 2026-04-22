@@ -41,6 +41,7 @@ class DocAdapter(private var docList: List<Doc>) : RecyclerView.Adapter<DocAdapt
             val intent = android.content.Intent(context, DocDetailActivity::class.java)
 
             // Pack the data into the Intent payload
+            intent.putExtra("EXTRA_ID", currentDoc.id)
             intent.putExtra("EXTRA_TITLE", currentDoc.title)
             intent.putExtra("EXTRA_CATEGORY", currentDoc.category)
             intent.putExtra("EXTRA_DOCUMENT", currentDoc.document)

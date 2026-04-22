@@ -24,4 +24,8 @@ class DocRepository(
     suspend fun getLocalDocs(): List<Doc> {
         return docDao.getAllDocs()
     }
+
+    suspend fun insertDoc(doc: Doc) {
+        docDao.insertDoc(doc)
+    }
 }

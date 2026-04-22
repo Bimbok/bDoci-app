@@ -85,6 +85,20 @@ class DocViewModel(private val repository: DocRepository) : ViewModel() {
         applyFilters()
     }
 
+    fun importDocument(doc: Doc) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                repository.insertDoc(doc)
+                // Refresh list
+                val freshDocs = repository.getLocalDocs()
+                fullList = freshDocs
+                applyFilters()
+            } catch (e: Exception) {
+                _errorMessage.value = "Import failed: ${e.message}"
+            }
+        }
+    }
+
     private fun applyFilters() {
         var filtered = fullList
 

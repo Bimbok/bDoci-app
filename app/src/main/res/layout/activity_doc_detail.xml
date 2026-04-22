@@ -62,6 +62,15 @@
                 android:background="@color/primary"
                 android:alpha="0.3" />
 
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnShareQR"
+                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Share via QR"
+                app:icon="@android:drawable/ic_menu_share" />
+
             <TextView
                 android:id="@+id/detailDescription"
                 android:layout_width="match_parent"

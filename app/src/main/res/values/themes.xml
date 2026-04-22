@@ -24,6 +24,6 @@
     </style>
 
     <style name="ShapeAppearanceOverlay.BDoci.Dialog.Rounded" parent="">
-        <item name="cornerSize">24dp</item>
+        <item name="cornerSize">28dp</item>
     </style>
 </resources>

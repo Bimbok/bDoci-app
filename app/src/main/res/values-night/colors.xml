@@ -1,13 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#D0BCFF</color>
-    <color name="primary_variant">#381E72</color>
-    <color name="on_primary">#381E72</color>
-    <color name="secondary">#CCC2DC</color>
-    <color name="background">#1A1C1E</color>
-    <color name="surface">#222427</color>
-    <color name="on_surface">#E2E2E6</color>
-    <color name="on_surface_variant">#C4C6D0</color>
-    <color name="search_bar_bg">#2D2F33</color>
-    <color name="divider">#3F474E</color>
+    <!-- Gruvbox Dark Palette -->
+    <color name="bg_cream">#282828</color> <!-- Main Background -->
+    <color name="bg_card">#3c3836</color>  <!-- Card/Surface -->
+    <color name="bg_card_selected">#504945</color>
+
+    <color name="gruv_fg">#ebdbb2</color>
+    <color name="gruv_grey">#a89984</color>
+
+    <!-- Dark Mode Accents (Slightly softer for Dark BG) -->
+    <color name="gruv_red">#fb4934</color>
+    <color name="gruv_green">#b8bb26</color>
+    <color name="gruv_yellow">#fabd2f</color>
+    <color name="gruv_blue">#83a598</color>
+    <color name="gruv_orange">#fe8019</color>
+    <color name="gruv_purple">#d3869b</color>
+    <color name="gruv_aqua">#8ec07c</color>
+
+    <!-- Code blocks stay dark in both modes, but we can make it deeper -->
+    <color name="gruv_dark_bg">#1d2021</color>
+    <color name="gruv_dark_fg">#ebdbb2</color>
+
+    <!-- App specific mappings -->
+    <color name="primary">#83a598</color> <!-- Gruvbox Blue (Dark) -->
+    <color name="primary_variant">#458588</color>
+    <color name="on_primary">#282828</color>
+    <color name="secondary">#b8bb26</color> <!-- Gruvbox Green (Dark) -->
+    <color name="background">@color/bg_cream</color>
+    <color name="surface">@color/bg_card</color>
+    <color name="on_surface">@color/gruv_fg</color>
+    <color name="on_surface_variant">@color/gruv_grey</color>
+    <color name="divider">#504945</color>
 </resources>

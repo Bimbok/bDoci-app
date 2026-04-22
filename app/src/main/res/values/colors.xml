@@ -1,13 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#6200EE</color>
-    <color name="primary_variant">#3700B3</color>
-    <color name="on_primary">#FFFFFF</color>
-    <color name="secondary">#03DAC6</color>
-    <color name="background">#F8F9FA</color>
-    <color name="surface">#FFFFFF</color>
-    <color name="on_surface">#1A1C1E</color>
-    <color name="on_surface_variant">#44474E</color>
-    <color name="search_bar_bg">#EDF1F7</color>
-    <color name="divider">#DDDDDD</color>
+    <!-- Gruvbox Light Palette -->
+    <color name="bg_cream">#f9f5d7</color>
+    <color name="bg_card">#f2e5bc</color>
+    <color name="bg_card_selected">#ebdbb2</color>
+
+    <color name="gruv_fg">#3c3836</color>
+    <color name="gruv_grey">#928374</color>
+
+    <!-- Pastel/Warm Gruvbox Accents -->
+    <color name="gruv_red">#cc241d</color>
+    <color name="gruv_green">#98971a</color>
+    <color name="gruv_yellow">#d79921</color>
+    <color name="gruv_blue">#458588</color>
+    <color name="gruv_orange">#d65d0e</color>
+    <color name="gruv_purple">#b16286</color>
+    <color name="gruv_aqua">#689d6a</color>
+
+    <!-- Dark Gruvbox for Code blocks -->
+    <color name="gruv_dark_bg">#282828</color>
+    <color name="gruv_dark_fg">#ebdbb2</color>
+
+    <!-- App specific mappings -->
+    <color name="primary">#458588</color> <!-- Gruvbox Blue -->
+    <color name="primary_variant">#076678</color>
+    <color name="on_primary">#f9f5d7</color>
+    <color name="secondary">#98971a</color> <!-- Gruvbox Green -->
+    <color name="background">@color/bg_cream</color>
+    <color name="surface">@color/bg_card</color>
+    <color name="on_surface">@color/gruv_fg</color>
+    <color name="on_surface_variant">@color/gruv_grey</color>
+    <color name="divider">#d5c4a1</color>
 </resources>

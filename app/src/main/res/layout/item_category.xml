@@ -3,19 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingHorizontal="12dp"
-    android:paddingVertical="4dp">
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="6dp">
 
     <TextView
         android:id="@+id/categoryName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/category_item_bg"
+        android:background="@drawable/category_selector"
         android:clickable="true"
         android:focusable="true"
-        android:paddingHorizontal="16dp"
+        android:gravity="center_vertical"
+        android:paddingHorizontal="20dp"
         android:paddingVertical="12dp"
-        android:textColor="@color/on_surface"
-        android:textSize="16sp" />
+        android:textColor="@color/gruv_fg"
+        android:fontFamily="sans-serif-medium"
+        android:textSize="14sp"
+        android:textAllCaps="true"
+        android:letterSpacing="0.1" />
 
 </LinearLayout>

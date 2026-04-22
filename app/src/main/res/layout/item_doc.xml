@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="16dp"
-    app:cardElevation="2dp"
-    app:cardBackgroundColor="@color/surface">
+    android:layout_marginHorizontal="16dp"
+    android:layout_marginVertical="8dp"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="0dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="@color/divider"
+    app:cardBackgroundColor="@color/bg_card">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,9 +21,10 @@
             android:id="@+id/textTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="20sp"
             android:textStyle="bold"
-            android:textColor="@color/on_surface"
+            android:fontFamily="serif"
+            android:textColor="@color/gruv_fg"
             android:text="Document Title" />
 
         <TextView
@@ -28,23 +32,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:textSize="14sp"
-            android:textColor="@color/on_surface_variant"
-            android:maxLines="2"
+            android:textSize="15sp"
+            android:textColor="@color/gruv_grey"
+            android:maxLines="3"
+            android:lineSpacingExtra="4dp"
             android:ellipsize="end"
             android:text="This is a short description of the document..." />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btnReadMore"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:layout_gravity="end"
-            android:text="Read More"
-            android:textColor="@color/primary"
-            app:rippleColor="@color/secondary" />
+            android:layout_marginTop="16dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnReadMore"
+                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Explore"
+                android:textAllCaps="false"
+                android:textColor="@color/on_primary"
+                app:cornerRadius="100dp"
+                app:backgroundTint="@color/primary" />
+        </LinearLayout>
 
     </LinearLayout>
 
-</androidx.cardview.widget.CardView>
+</com.google.android.material.card.MaterialCardView>

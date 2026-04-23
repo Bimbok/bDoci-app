@@ -3,6 +3,7 @@ package com.example.bdoci
 import android.os.Bundle
 import android.view.View
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -75,6 +76,8 @@ class DocDetailActivity : AppCompatActivity() {
         val btnCopyCode = findViewById<MaterialButton>(R.id.btnCopyCode)
         val btnShareQR = findViewById<MaterialButton>(R.id.btnShareQR)
         val toolbar = findViewById<com.google.android.material.appbar.MaterialToolbar>(R.id.toolbar)
+        val readingProgress = findViewById<com.google.android.material.progressindicator.LinearProgressIndicator>(R.id.readingProgress)
+        val scrollView = findViewById<ScrollView>(R.id.detailScrollView)
         val zoomSlider = findViewById<Slider>(R.id.zoomSlider)
         val zoomCard = findViewById<View>(R.id.zoomCard)
         val fabZoom = findViewById<FloatingActionButton>(R.id.fabZoom)
@@ -98,6 +101,28 @@ class DocDetailActivity : AppCompatActivity() {
         }
 
         zoomCard.setOnClickListener { resetHideTimer() }
+
+        // Setup Reading Progress
+        scrollView.viewTreeObserver.addOnScrollChangedListener {
+            val scrollY = scrollView.scrollY
+            val childHeight = scrollView.getChildAt(0).height
+            val totalHeight = childHeight - scrollView.height
+            if (totalHeight > 0) {
+                val progress = (scrollY * 100) / totalHeight
+                readingProgress.setProgress(progress, true)
+            }
+        }
+
+        // Setup Reading Progress
+        scrollView.viewTreeObserver.addOnScrollChangedListener {
+            val scrollY = scrollView.scrollY
+            val childHeight = scrollView.getChildAt(0).height
+            val totalHeight = childHeight - scrollView.height
+            if (totalHeight > 0) {
+                val progress = (scrollY * 100) / totalHeight
+                readingProgress.setProgress(progress, true)
+            }
+        }
 
         // Setup Toolbar
         setSupportActionBar(toolbar)

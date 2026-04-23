@@ -19,9 +19,19 @@
             android:layout_height="?attr/actionBarSize"
             app:navigationIcon="?attr/homeAsUpIndicator"
             app:navigationIconTint="@color/on_surface" />
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/readingProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:progress="0"
+            app:indicatorColor="@color/primary"
+            app:trackColor="@android:color/transparent"
+            app:trackThickness="3dp" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <ScrollView
+        android:id="@+id/detailScrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

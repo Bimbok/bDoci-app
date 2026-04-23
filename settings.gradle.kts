@@ -6,7 +6,7 @@ pluginManagement {
                 includeGroupByRegex("com\\.google\\.android.*")
                 includeGroupByRegex("androidx.*")
                 includeGroup("com.google.firebase")
-                includeGroup("com.google.gms")
+                includeGroupByRegex("com\\.google\\.gms.*")
             }
         }
         mavenCentral()

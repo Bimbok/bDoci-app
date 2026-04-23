@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "486217629867",
+    "project_id": "bdoci-9fdc3",
+    "storage_bucket": "bdoci-9fdc3.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:486217629867:android:31749e4082df30c029b7ee",
+        "android_client_info": {
+          "package_name": "com.example.bdoci"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsRCBhNpQApVM9CToSBUWxoi66q_JL9b0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

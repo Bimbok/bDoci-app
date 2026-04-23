@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">bDoci</string>
+    <string name="copied">Copied!</string>
+    <string name="copy">Copy</string>
 </resources>

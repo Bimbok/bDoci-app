@@ -57,10 +57,6 @@ dependencies {
     implementation("androidx.room:room-runtime:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
     ksp("androidx.room:room-compiler:$room_version")
-    // For Kotlin use kapt or ksp. Since the project uses Kotlin, let's use ksp if possible or just kapt.
-    // Checking plugins for ksp... not found. Let's use kapt.
-    // Wait, I should check if kapt is already there or if I should add it.
-    // I'll add kapt plugin and the dependency.
     implementation(libs.androidx.constraintlayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

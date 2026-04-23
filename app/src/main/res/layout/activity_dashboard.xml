@@ -88,12 +88,24 @@
             android:id="@+id/offlineIndicator"
             android:layout_width="14dp"
             android:layout_height="14dp"
-            android:layout_marginTop="36dp"
-            android:layout_marginEnd="24dp"
+            android:layout_marginEnd="8dp"
             android:background="@drawable/offline_dot"
             android:visibility="gone"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintBottom_toBottomOf="@id/hamburgerMenu"
+            app:layout_constraintEnd_toStartOf="@id/hamburgerMenu"
+            app:layout_constraintTop_toTopOf="@id/hamburgerMenu" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fabFloatingWidget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:contentDescription="Start Floating Widget"
+            android:src="@android:drawable/ic_menu_view"
+            app:backgroundTint="#fe8019"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:tint="#282828" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

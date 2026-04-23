@@ -34,6 +34,10 @@ class DocViewModel(private val repository: DocRepository) : ViewModel() {
     private var currentQuery: String = ""
     private var currentCategory: String = "All"
 
+    init {
+        fetchDocuments()
+    }
+
     fun fetchDocuments() {
         _isLoading.value = true
         _errorMessage.value = null

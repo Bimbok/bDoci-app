@@ -4,6 +4,10 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"
+        tools:node="replace"/>
 
     <application
         android:name=".app.BDociApp"
@@ -42,6 +46,17 @@
             android:exported="false"
             android:label="@string/app_name"
             android:theme="@style/Theme.BDoci" />
+
+        <service
+            android:name=".FloatingTerminalService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <service
+            android:name=".FloatingDocService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="specialUse" />
 
     </application>
 

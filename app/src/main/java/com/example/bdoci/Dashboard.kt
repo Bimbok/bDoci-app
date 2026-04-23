@@ -77,6 +77,24 @@ class Dashboard : AppCompatActivity() {
             drawerLayout.openDrawer(GravityCompat.END)
         }
 
+        val fabFloatingWidget: com.google.android.material.floatingactionbutton.FloatingActionButton = findViewById(R.id.fabFloatingWidget)
+        fabFloatingWidget.setOnClickListener {
+            if (!android.provider.Settings.canDrawOverlays(this)) {
+                val intent = Intent(
+                    android.provider.Settings.ACTION_MANAGE_OVERLAY_PERMISSION,
+                    android.net.Uri.parse("package:$packageName")
+                )
+                startActivity(intent)
+            } else {
+                val intent = Intent(this, FloatingDocService::class.java)
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    startForegroundService(intent)
+                } else {
+                    startService(intent)
+                }
+            }
+        }
+
         networkUtils = NetworkUtils(this)
 
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -93,9 +111,6 @@ class Dashboard : AppCompatActivity() {
 
         // Setup search
         setupSearch()
-
-        // Trigger fetch (it only fetches if data is empty)
-        viewModel.fetchDocuments()
 
         // Handle deep link
         handleDeepLink(intent)

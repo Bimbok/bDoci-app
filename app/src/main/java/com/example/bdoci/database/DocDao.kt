@@ -11,6 +11,9 @@ interface DocDao {
     @Query("SELECT * FROM documents")
     suspend fun getAllDocs(): List<Doc>
 
+    @Query("SELECT * FROM documents WHERE title LIKE :query OR document LIKE :query")
+    suspend fun searchDocs(query: String): List<Doc>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(docs: List<Doc>)
 

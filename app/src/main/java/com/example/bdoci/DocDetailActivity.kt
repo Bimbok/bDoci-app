@@ -18,13 +18,39 @@ import java.util.regex.Pattern
 import android.content.ClipboardManager
 import android.content.Context
 import android.widget.Toast
+import android.os.Handler
+import android.os.Looper
+import android.transition.AutoTransition
+import android.transition.TransitionManager
+import android.view.ViewGroup
 import com.google.android.material.button.MaterialButton
 import com.example.bdoci.models.Doc
 import com.example.bdoci.utils.QRUtils
 import android.widget.ImageView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.slider.Slider
 
 class DocDetailActivity : AppCompatActivity() {
+
+    private val hideHandler = Handler(Looper.getMainLooper())
+    private val hideRunnable = Runnable {
+        val zoomCard = findViewById<View>(R.id.zoomCard)
+        val fabZoom = findViewById<View>(R.id.fabZoom)
+        val root = zoomCard.parent as ViewGroup
+        
+        TransitionManager.beginDelayedTransition(root, AutoTransition().apply {
+            duration = 300
+        })
+        
+        zoomCard.visibility = View.GONE
+        fabZoom.visibility = View.VISIBLE
+    }
+
+    private fun resetHideTimer() {
+        hideHandler.removeCallbacks(hideRunnable)
+        hideHandler.postDelayed(hideRunnable, 3000)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +76,29 @@ class DocDetailActivity : AppCompatActivity() {
         val btnCopyCode = findViewById<MaterialButton>(R.id.btnCopyCode)
         val btnShareQR = findViewById<MaterialButton>(R.id.btnShareQR)
         val toolbar = findViewById<com.google.android.material.appbar.MaterialToolbar>(R.id.toolbar)
+        val zoomSlider = findViewById<Slider>(R.id.zoomSlider)
+        val zoomCard = findViewById<View>(R.id.zoomCard)
+        val fabZoom = findViewById<FloatingActionButton>(R.id.fabZoom)
+
+        // Setup Zoom Slider
+        zoomSlider.addOnChangeListener { _, value, _ ->
+            descText.textSize = value
+            codeText.textSize = value - 2f // Keep code slightly smaller
+            resetHideTimer()
+        }
+
+        fabZoom.setOnClickListener {
+            val root = zoomCard.parent as ViewGroup
+            TransitionManager.beginDelayedTransition(root, AutoTransition().apply {
+                duration = 300
+            })
+
+            fabZoom.visibility = View.GONE
+            zoomCard.visibility = View.VISIBLE
+            resetHideTimer()
+        }
+
+        zoomCard.setOnClickListener { resetHideTimer() }
 
         // Setup Toolbar
         setSupportActionBar(toolbar)

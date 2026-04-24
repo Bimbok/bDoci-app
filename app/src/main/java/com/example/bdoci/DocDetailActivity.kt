@@ -183,7 +183,6 @@ class DocDetailActivity : AppCompatActivity() {
 
     private fun shareDocLink(doc: Doc) {
         val baseUrl = "https://bimbokdocs.vercel.app/"
-        // Only encode spaces as %20 to match user requirements
         val encodedTitle = doc.title.replace(" ", "%20")
         val shareUrl = "$baseUrl$encodedTitle"
 

@@ -2,4 +2,5 @@
     <string name="app_name">bDoci</string>
     <string name="copied">Copied!</string>
     <string name="copy">Copy</string>
+    <string name="share_link">Share Link</string>
 </resources>

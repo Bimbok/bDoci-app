@@ -35,6 +35,14 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <data android:scheme="bdoci" android:host="share" />
             </intent-filter>
+
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="http" android:host="bimbokdocs.vercel.app" />
+                <data android:scheme="https" android:host="bimbokdocs.vercel.app" />
+            </intent-filter>
         </activity>
 
         <activity

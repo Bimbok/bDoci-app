@@ -72,14 +72,29 @@
                 android:background="@color/primary"
                 android:alpha="0.3" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnShareQR"
-                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="Share via QR"
-                app:icon="@android:drawable/ic_menu_share" />
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnShareQR"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Share via QR"
+                    app:icon="@android:drawable/ic_menu_share" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnShareLink"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:text="@string/share_link"
+                    app:icon="@android:drawable/ic_menu_share" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/detailDescription"

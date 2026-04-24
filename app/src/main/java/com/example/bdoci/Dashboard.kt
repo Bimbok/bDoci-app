@@ -160,8 +160,9 @@ class Dashboard : AppCompatActivity() {
     }
 
     private fun handleDeepLink(intent: Intent?) {
-        val data = intent?.data
-        if (data != null && data.scheme == "bdoci" && data.host == "share") {
+        val data = intent?.data ?: return
+        
+        if (data.scheme == "bdoci" && data.host == "share") {
             val payload = data.getQueryParameter("payload")
             if (payload != null) {
                 val doc = QRUtils.decodeBase64ToDoc(payload)
@@ -170,6 +171,50 @@ class Dashboard : AppCompatActivity() {
                     Toast.makeText(this, "Importing: ${doc.title}", Toast.LENGTH_SHORT).show()
                 } else {
                     Toast.makeText(this, "Invalid document data", Toast.LENGTH_SHORT).show()
+                }
+            }
+        } else if ((data.scheme == "http" || data.scheme == "https") && data.host == "bimbokdocs.vercel.app") {
+            val path = data.path
+            if (!path.isNullOrEmpty() && path != "/") {
+                // data.path is already decoded by Android's Uri class
+                val decodedTitle = path.substring(1)
+                
+                lifecycleScope.launch {
+                    viewModel.documents.collect { docs ->
+                        if (docs.isNotEmpty()) {
+                            val doc = docs.find { it.title.equals(decodedTitle, ignoreCase = true) }
+                            if (doc != null) {
+                                val detailIntent = Intent(this@Dashboard, DocDetailActivity::class.java).apply {
+                                    putExtra("EXTRA_ID", doc.id)
+                                    putExtra("EXTRA_TITLE", doc.title)
+                                    putExtra("EXTRA_CATEGORY", doc.category)
+                                    putExtra("EXTRA_DOCUMENT", doc.document)
+                                    putExtra("EXTRA_CODE", doc.code)
+                                }
+                                startActivity(detailIntent)
+                            } else {
+                                // Fallback: try decoding in case it was double encoded or has other issues
+                                try {
+                                    val altDecoded = java.net.URLDecoder.decode(decodedTitle, "UTF-8")
+                                    val altDoc = docs.find { it.title.equals(altDecoded, ignoreCase = true) }
+                                    if (altDoc != null) {
+                                        val detailIntent = Intent(this@Dashboard, DocDetailActivity::class.java).apply {
+                                            putExtra("EXTRA_ID", altDoc.id)
+                                            putExtra("EXTRA_TITLE", altDoc.title)
+                                            putExtra("EXTRA_CATEGORY", altDoc.category)
+                                            putExtra("EXTRA_DOCUMENT", altDoc.document)
+                                            putExtra("EXTRA_CODE", altDoc.code)
+                                        }
+                                        startActivity(detailIntent)
+                                        return@collect
+                                    }
+                                } catch (e: Exception) {}
+                                
+                                Toast.makeText(this@Dashboard, "Document not found: $decodedTitle", Toast.LENGTH_SHORT).show()
+                            }
+                            return@collect
+                        }
+                    }
                 }
             }
         }

@@ -75,6 +75,7 @@ class DocDetailActivity : AppCompatActivity() {
         val codeScroll = findViewById<View>(R.id.codeScroll)
         val btnCopyCode = findViewById<MaterialButton>(R.id.btnCopyCode)
         val btnShareQR = findViewById<MaterialButton>(R.id.btnShareQR)
+        val btnShareLink = findViewById<MaterialButton>(R.id.btnShareLink)
         val toolbar = findViewById<com.google.android.material.appbar.MaterialToolbar>(R.id.toolbar)
         val readingProgress = findViewById<com.google.android.material.progressindicator.LinearProgressIndicator>(R.id.readingProgress)
         val scrollView = findViewById<ScrollView>(R.id.detailScrollView)
@@ -143,6 +144,10 @@ class DocDetailActivity : AppCompatActivity() {
             showQRCodeDialog(currentDoc)
         }
 
+        btnShareLink.setOnClickListener {
+            shareDocLink(currentDoc)
+        }
+
         // Set the data to the views
         titleText.text = title
         categoryText.text = category.uppercase()
@@ -174,6 +179,22 @@ class DocDetailActivity : AppCompatActivity() {
             codeHeader.visibility = View.GONE
             codeScroll.visibility = View.GONE
         }
+    }
+
+    private fun shareDocLink(doc: Doc) {
+        val baseUrl = "https://bimbokdocs.vercel.app/"
+        // Only encode spaces as %20 to match user requirements
+        val encodedTitle = doc.title.replace(" ", "%20")
+        val shareUrl = "$baseUrl$encodedTitle"
+
+        val sendIntent: android.content.Intent = android.content.Intent().apply {
+            action = android.content.Intent.ACTION_SEND
+            putExtra(android.content.Intent.EXTRA_TEXT, "Check out this document: $shareUrl")
+            type = "text/plain"
+        }
+
+        val shareIntent = android.content.Intent.createChooser(sendIntent, null)
+        startActivity(shareIntent)
     }
 
     private fun showQRCodeDialog(doc: Doc) {

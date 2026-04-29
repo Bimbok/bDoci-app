@@ -11,7 +11,7 @@ import com.example.bdoci.models.Doc
 
 class DocAdapter(
     private var docList: List<Doc>,
-    private val onFavoriteClick: (Doc) -> Unit
+    private val onFavoriteClick: (Doc, Int) -> Unit
 ) : RecyclerView.Adapter<DocAdapter.DocViewHolder>() {
 
     fun updateData(newList: List<Doc>) {
@@ -42,7 +42,10 @@ class DocAdapter(
         }
 
         holder.favoriteButton.setOnClickListener {
-            onFavoriteClick(currentDoc)
+            val currentPos = holder.bindingAdapterPosition
+            if (currentPos != RecyclerView.NO_POSITION) {
+                onFavoriteClick(docList[currentPos], currentPos)
+            }
         }
 
         holder.readMoreButton.setOnClickListener {

@@ -49,11 +49,6 @@
             android:theme="@style/Theme.BDoci" />
 
         <service
-            android:name=".FloatingTerminalService"
-            android:enabled="true"
-            android:exported="false" />
-
-        <service
             android:name=".FloatingDocService"
             android:enabled="true"
             android:exported="false"

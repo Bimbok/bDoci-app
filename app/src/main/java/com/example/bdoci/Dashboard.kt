@@ -184,7 +184,7 @@ class Dashboard : AppCompatActivity() {
                         if (::docAdapter.isInitialized) {
                             docAdapter.updateData(documents)
                         } else {
-                            docAdapter = DocAdapter(documents) { doc ->
+                            docAdapter = DocAdapter(documents) { doc, position ->
                                 viewModel.toggleFavorite(doc)
                             }
                             recyclerView.adapter = docAdapter

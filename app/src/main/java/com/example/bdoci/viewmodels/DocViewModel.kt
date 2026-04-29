@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.HttpException
 
 class DocViewModel(private val repository: DocRepository) : ViewModel() {
@@ -48,8 +49,10 @@ class DocViewModel(private val repository: DocRepository) : ViewModel() {
                 val localDocs = repository.getLocalDocs()
                 if (localDocs.isNotEmpty()) {
                     fullList = localDocs
-                    updateCategories(localDocs)
-                    applyFilters()
+                    withContext(Dispatchers.Main) {
+                        updateCategories(localDocs)
+                        applyFilters()
+                    }
                 }
 
                 // 2. Refresh from network in background
@@ -58,22 +61,28 @@ class DocViewModel(private val repository: DocRepository) : ViewModel() {
                 // 3. Update with fresh data from local database
                 val freshDocs = repository.getLocalDocs()
                 fullList = freshDocs
-                updateCategories(freshDocs)
-                applyFilters()
-                _isLoading.value = false
-            } catch (e: HttpException) {
-                _isLoading.value = false
-                val message = when (e.code()) {
-                    429 -> "Too Many Requests (Rate Limited)"
-                    else -> "Server error: ${e.code()}"
+                withContext(Dispatchers.Main) {
+                    updateCategories(freshDocs)
+                    applyFilters()
+                    _isLoading.value = false
                 }
-                if (_documents.value.isEmpty()) {
-                    _errorMessage.value = message
+            } catch (e: HttpException) {
+                withContext(Dispatchers.Main) {
+                    _isLoading.value = false
+                    val message = when (e.code()) {
+                        429 -> "Too Many Requests (Rate Limited)"
+                        else -> "Server error: ${e.code()}"
+                    }
+                    if (_documents.value.isEmpty()) {
+                        _errorMessage.value = message
+                    }
                 }
             } catch (e: Exception) {
-                _isLoading.value = false
-                if (_documents.value.isEmpty()) {
-                    _errorMessage.value = "Failed to load data: ${e.message}"
+                withContext(Dispatchers.Main) {
+                    _isLoading.value = false
+                    if (_documents.value.isEmpty()) {
+                        _errorMessage.value = "Failed to load data: ${e.message}"
+                    }
                 }
             }
         }
@@ -102,27 +111,40 @@ class DocViewModel(private val repository: DocRepository) : ViewModel() {
                 // Refresh list
                 val freshDocs = repository.getLocalDocs()
                 fullList = freshDocs
-                applyFilters()
+                withContext(Dispatchers.Main) {
+                    applyFilters()
+                }
             } catch (e: Exception) {
-                _errorMessage.value = "Import failed: ${e.message}"
+                withContext(Dispatchers.Main) {
+                    _errorMessage.value = "Import failed: ${e.message}"
+                }
             }
         }
     }
 
     fun toggleFavorite(doc: Doc) {
+        // 1. Optimistic Update on Main Thread
+        val newStatus = !doc.isFavorite
+        doc.isFavorite = newStatus
+        
+        // Find in full list and update there too
+        fullList.find { it.id == doc.id }?.isFavorite = newStatus
+        
+        // Trigger UI update immediately
+        applyFilters()
+
+        // 2. Persistent Update in Background
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                val newStatus = !doc.isFavorite
                 repository.toggleFavorite(doc.id, newStatus)
-                
-                // Update local status in the full list
-                fullList.find { it.id == doc.id }?.isFavorite = newStatus
-                
-                // Always re-apply filters to ensure _documents gets a NEW list reference
-                // This triggers the StateFlow emission even if the list content is similar
-                applyFilters()
             } catch (e: Exception) {
-                _errorMessage.value = "Failed to toggle favorite: ${e.message}"
+                // Revert on failure
+                withContext(Dispatchers.Main) {
+                    doc.isFavorite = !newStatus
+                    fullList.find { it.id == doc.id }?.isFavorite = !newStatus
+                    applyFilters()
+                    _errorMessage.value = "Failed to toggle favorite: ${e.message}"
+                }
             }
         }
     }
@@ -145,10 +167,8 @@ class DocViewModel(private val repository: DocRepository) : ViewModel() {
             }
         }
 
-        // IMPORTANT: We use .toList() to create a new list reference.
-        // MutableStateFlow only emits if the NEW value is NOT EQUAL to the OLD value.
-        // If we just pass the same list reference, it won't emit.
-        _documents.value = filtered.toList()
+        // Emit a fresh list copy
+        _documents.value = ArrayList(filtered)
     }
 
     companion object {

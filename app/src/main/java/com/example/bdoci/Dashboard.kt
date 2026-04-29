@@ -184,7 +184,9 @@ class Dashboard : AppCompatActivity() {
                         if (::docAdapter.isInitialized) {
                             docAdapter.updateData(documents)
                         } else {
-                            docAdapter = DocAdapter(documents)
+                            docAdapter = DocAdapter(documents) { doc ->
+                                viewModel.toggleFavorite(doc)
+                            }
                             recyclerView.adapter = docAdapter
                         }
                     }

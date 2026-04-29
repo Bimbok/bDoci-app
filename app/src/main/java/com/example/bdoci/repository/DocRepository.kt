@@ -1,14 +1,15 @@
 package com.example.bdoci.repository
 
 import com.example.bdoci.database.DocDao
+import com.example.bdoci.database.FavoriteDao
 import com.example.bdoci.models.Doc
+import com.example.bdoci.models.Favorite
 import com.example.bdoci.network.ApiService
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 
 class DocRepository(
     private val apiService: ApiService,
-    private val docDao: DocDao
+    private val docDao: DocDao,
+    private val favoriteDao: FavoriteDao
 ) {
     suspend fun refreshDocs() {
         try {
@@ -22,10 +23,21 @@ class DocRepository(
     }
 
     suspend fun getLocalDocs(): List<Doc> {
-        return docDao.getAllDocs()
+        val docs = docDao.getAllDocs()
+        val favoriteIds = favoriteDao.getAllFavoriteIds().toSet()
+        docs.forEach { it.isFavorite = favoriteIds.contains(it.id) }
+        return docs
     }
 
     suspend fun insertDoc(doc: Doc) {
         docDao.insertDoc(doc)
+    }
+
+    suspend fun toggleFavorite(docId: String, isFavorite: Boolean) {
+        if (isFavorite) {
+            favoriteDao.insert(Favorite(docId))
+        } else {
+            favoriteDao.delete(Favorite(docId))
+        }
     }
 }

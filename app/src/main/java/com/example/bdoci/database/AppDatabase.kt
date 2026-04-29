@@ -5,10 +5,12 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.bdoci.models.Doc
+import com.example.bdoci.models.Favorite
 
-@Database(entities = [Doc::class], version = 1)
+@Database(entities = [Doc::class, Favorite::class], version = 2)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun docDao(): DocDao
+    abstract fun favoriteDao(): FavoriteDao
 
     companion object {
         @Volatile
@@ -20,7 +22,9 @@ abstract class AppDatabase : RoomDatabase() {
                     context.applicationContext,
                     AppDatabase::class.java,
                     "bdoci_database"
-                ).build()
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
                 INSTANCE = instance
                 instance
             }

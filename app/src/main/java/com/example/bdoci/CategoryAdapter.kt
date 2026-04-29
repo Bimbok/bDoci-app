@@ -32,18 +32,30 @@ class CategoryAdapter(
         textView.text = category
 
         val isSelected = position == selectedPosition
+        val isFavorites = category == "Favorites"
         
-        // Make selection very prominent
+        // Apply styling
         if (isSelected) {
-            textView.setBackgroundResource(R.drawable.category_item_bg)
+            if (isFavorites) {
+                textView.setBackgroundResource(R.drawable.category_favorites_bg)
+                textView.setTextColor(holder.itemView.context.getColor(R.color.gruv_fg))
+            } else {
+                textView.setBackgroundResource(R.drawable.category_item_bg)
+                textView.setTextColor(holder.itemView.context.getColor(R.color.primary))
+            }
             textView.isActivated = true
             textView.setTypeface(null, android.graphics.Typeface.BOLD)
-            textView.setTextColor(holder.itemView.context.getColor(R.color.primary))
         } else {
-            textView.setBackgroundResource(0)
+            if (isFavorites) {
+               textView.setBackgroundResource(0)
+               textView.setTextColor(holder.itemView.context.getColor(R.color.gruv_yellow))
+               textView.setTypeface(null, android.graphics.Typeface.BOLD)
+            } else {
+               textView.setBackgroundResource(0)
+               textView.setTextColor(holder.itemView.context.getColor(R.color.on_surface))
+               textView.setTypeface(null, android.graphics.Typeface.NORMAL)
+            }
             textView.isActivated = false
-            textView.setTypeface(null, android.graphics.Typeface.NORMAL)
-            textView.setTextColor(holder.itemView.context.getColor(R.color.on_surface))
         }
         
         textView.setOnClickListener {
@@ -55,7 +67,6 @@ class CategoryAdapter(
                 notifyItemChanged(selectedPosition)
                 onCategoryClick(categories[currentPos])
             } else if (currentPos == selectedPosition) {
-                // If already selected, just close drawer (as requested)
                 onCategoryClick(categories[currentPos])
             }
         }

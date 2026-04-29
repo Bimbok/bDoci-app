@@ -1,6 +1,7 @@
 package com.example.bdoci.models
 
 import androidx.room.Entity
+import androidx.room.Ignore
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
@@ -17,4 +18,7 @@ data class Doc(
     val code: String?,
     @SerializedName("category")
     val category: String
-)
+) {
+    @Ignore
+    var isFavorite: Boolean = false
+}

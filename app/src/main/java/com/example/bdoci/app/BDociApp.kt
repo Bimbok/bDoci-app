@@ -7,5 +7,5 @@ import com.example.bdoci.repository.DocRepository
 
 class BDociApp : Application() {
     val database by lazy { AppDatabase.getDatabase(this) }
-    val repository by lazy { DocRepository(ApiClient.apiService, database.docDao()) }
+    val repository by lazy { DocRepository(ApiClient.apiService, database.docDao(), database.favoriteDao()) }
 }

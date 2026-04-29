@@ -48,7 +48,7 @@ class DocViewModel(private val repository: DocRepository) : ViewModel() {
                 val localDocs = repository.getLocalDocs()
                 if (localDocs.isNotEmpty()) {
                     fullList = localDocs
-                    _categories.value = localDocs.map { it.category }.distinct().sorted()
+                    updateCategories(localDocs)
                     applyFilters()
                 }
 
@@ -58,7 +58,7 @@ class DocViewModel(private val repository: DocRepository) : ViewModel() {
                 // 3. Update with fresh data from local database
                 val freshDocs = repository.getLocalDocs()
                 fullList = freshDocs
-                _categories.value = freshDocs.map { it.category }.distinct().sorted()
+                updateCategories(freshDocs)
                 applyFilters()
                 _isLoading.value = false
             } catch (e: HttpException) {
@@ -77,6 +77,12 @@ class DocViewModel(private val repository: DocRepository) : ViewModel() {
                 }
             }
         }
+    }
+
+    private fun updateCategories(docs: List<Doc>) {
+        val cats = docs.map { it.category }.distinct().sorted().toMutableList()
+        cats.add("Favorites")
+        _categories.value = cats
     }
 
     fun filterDocuments(query: String) {
@@ -103,11 +109,31 @@ class DocViewModel(private val repository: DocRepository) : ViewModel() {
         }
     }
 
+    fun toggleFavorite(doc: Doc) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val newStatus = !doc.isFavorite
+                repository.toggleFavorite(doc.id, newStatus)
+                
+                // Update local status in the full list
+                fullList.find { it.id == doc.id }?.isFavorite = newStatus
+                
+                // Always re-apply filters to ensure _documents gets a NEW list reference
+                // This triggers the StateFlow emission even if the list content is similar
+                applyFilters()
+            } catch (e: Exception) {
+                _errorMessage.value = "Failed to toggle favorite: ${e.message}"
+            }
+        }
+    }
+
     private fun applyFilters() {
         var filtered = fullList
 
         // 1. Apply category filter
-        if (currentCategory != "All") {
+        if (currentCategory == "Favorites") {
+            filtered = filtered.filter { it.isFavorite }
+        } else if (currentCategory != "All") {
             filtered = filtered.filter { it.category == currentCategory }
         }
 
@@ -119,7 +145,10 @@ class DocViewModel(private val repository: DocRepository) : ViewModel() {
             }
         }
 
-        _documents.value = filtered
+        // IMPORTANT: We use .toList() to create a new list reference.
+        // MutableStateFlow only emits if the NEW value is NOT EQUAL to the OLD value.
+        // If we just pass the same list reference, it won't emit.
+        _documents.value = filtered.toList()
     }
 
     companion object {

@@ -60,7 +60,9 @@ Moving away from the harsh glaring whites of standard Material Design, bDoci uti
 
 - bDoci breaks the barrier of internet dependency with its flagship offline sharing. Find a vital code snippet while disconnected? Tap "Share" to serialize the document into a Base64-encoded JSON payload, which is instantly converted into a custom `bdoci://share` QR code. A teammate can scan the code using their native camera, and Android's Intent system will catch the deep link, launch bDoci, and inject the document directly into their local Room Database. True zero-network collaboration.
 
----
+## ⭐ Personalized Offline Favorites
+
+- Scrolling through a growing knowledge base to find your most frequently used code snippets is inefficient. bDoci features a robust, locally cached Favorites system powered by a dedicated Room Database entity. Users can instantly "Star" any document to pin it to a dedicated Quick Access category on their dashboard. Because this user preference layer is completely decoupled from the remote server and stored offline, your pinned snippets are securely preserved and instantly available, regardless of backend network updates or internet connectivity.
 
 ## 📸 Sample Screens
 

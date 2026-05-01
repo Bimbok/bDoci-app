@@ -287,6 +287,14 @@ class DocDetailActivity : AppCompatActivity() {
                 "\\b\\d+\\b" to colorPurple,
                 "#\\s*\\w+" to colorAqua
             )
+            "go" -> listOf(
+                "\\b(break|default|func|interface|select|case|defer|go|map|struct|chan|else|goto|package|switch|const|fallthrough|if|range|type|continue|for|import|return|var)\\b" to colorRed,
+                "\\b(bool|string|int|int8|int16|int32|int64|uint|uint8|uint16|uint32|uint64|uintptr|byte|rune|float32|float64|complex64|complex128|error|uintptr)\\b" to colorYellow,
+                "//.*|(?s)/\\*.*?\\*/" to colorGray,
+                "(['\"])(?:\\\\.|(?!\\1).)*\\1|`(?s).*?`" to colorGreen,
+                "\\b\\d+\\b" to colorPurple,
+                "\\b(append|cap|close|complex|copy|delete|imag|len|make|new|panic|print|println|real|recover)\\b" to colorAqua
+            )
             else -> listOf( // Kotlin / Default
                 "\\b(val|var|fun|class|interface|object|if|else|when|for|while|return|import|package|null|true|false|try|catch|finally|throw|in|as|is|super|this|typealias|constructor|init|companion|field|it|suspend|launch|async|await|delay|yield|inline|reified|sealed|data|internal|expect|actual)\\b" to colorRed,
                 "\\b(String|Int|Boolean|Long|Float|Double|Any|Unit|List|Map|Set|Result|Throwable|Exception)\\b" to colorYellow,
@@ -315,9 +323,11 @@ class DocDetailActivity : AppCompatActivity() {
             cat.contains("sql") || cat.contains("database") || cat.contains("sqlite") -> "sql"
             cat.contains("c++") || cat.contains("cpp") -> "cpp"
             cat.contains("c") -> "c"
+            cat.contains("go") || cat.contains("golang") -> "go"
             cat.contains("kotlin") || cat.contains("android") -> "kotlin"
             // Fallback for generic categories
             code.contains("#include") -> "cpp"
+            code.contains("func ") && code.contains("package ") -> "go"
             code.contains("def ") || (code.contains("import ") && code.contains(":")) -> "python"
             code.contains("public class ") || code.contains("System.out.println") -> "java"
             code.contains("const ") || code.contains("let ") || code.contains("function ") -> "javascript"

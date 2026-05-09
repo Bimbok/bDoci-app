@@ -1,146 +1,268 @@
-# 📱 bDoci: The Developer's Pocket Knowledge Base
+<div align="center">
 
-![Android](https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white)
-![Kotlin](https://img.shields.io/badge/Kotlin-0095D5?&style=for-the-badge&logo=kotlin&logoColor=white)
-![Architecture](https://img.shields.io/badge/Architecture-MVVM-blue?style=for-the-badge)
-![Firebase](https://img.shields.io/badge/Firebase-FCM-FFCA28?style=for-the-badge&logo=firebase)
+<img src="app/src/main/res/drawable/logo.png" alt="bDoci Logo" width="220px">
 
-**bDoci** is a beautifully crafted, native Android application acting as the mobile client for the Documentation Hub ecosystem. Designed for developers, by a developer, it provides lightning-fast, beautifully rendered access to technical documentation, algorithm explanations, and code snippets.
+# bDoci
 
-Built with modern Android development practices, a bespoke "Gruvbox" aesthetic, and an incredibly robust offline-first architecture, bDoci ensures your knowledge is always in your pocket—and even floats over your other apps.
+**A modern Android documentation companion that keeps developer knowledge searchable, readable, and accessible even when you are offline.**
+
+[![Android](https://img.shields.io/badge/Android-Native-3DDC84?style=flat&logo=android&logoColor=white)](https://developer.android.com/)
+[![Kotlin](https://img.shields.io/badge/Kotlin-2.2-7F52FF?style=flat&logo=kotlin&logoColor=white)](https://kotlinlang.org/)
+[![Gradle](https://img.shields.io/badge/Gradle-KTS-02303A?style=flat&logo=gradle&logoColor=white)](https://gradle.org/)
+[![Room](https://img.shields.io/badge/Room-Offline--First-4285F4?style=flat)](https://developer.android.com/training/data-storage/room)
+[![Firebase](https://img.shields.io/badge/Firebase-FCM-FFCA28?style=flat&logo=firebase&logoColor=black)](https://firebase.google.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat)](LICENSE)
+
+### 🚀 Highlights
+
+Native Android app · Offline-first docs · Floating overlay access · QR deep-link sharing · Firebase push updates
+
+### Lead Maintainer
+
+<table>
+  <tr>
+    <td align="center" style="padding: 6px 18px;">
+      <a href="https://github.com/Bimbok">
+        <img src="https://github.com/Bimbok.png?size=160" width="120" height="120" alt="Bimbok" style="border-radius: 50%; border: 3px solid #16A34A;" />
+      </a>
+      <br />
+      <a href="https://github.com/Bimbok"><strong>@Bimbok</strong></a>
+      <br />
+      <a href="https://github.com/Bimbok">
+        <img src="https://img.shields.io/badge/Follow-Bimbok-16A34A?style=for-the-badge&logo=github" alt="Follow Bimbok" />
+      </a>
+    </td>
+  </tr>
+</table>
+
+<sub>Built and maintained by Bimbok.</sub>
+
+</div>
 
 ---
 
-## ✨ Flagship Features
+## 💡 Project Purpose
 
-### 🪟 Floating Window Companion (PiP Mode)
+Developers regularly jump between tutorials, notes, snippets, and reference material while coding. On mobile, that usually means slow context switching, poor readability, and no useful offline support.
 
-Context switching on mobile is frustrating. bDoci features a native **System Alert Window** service that drops a draggable, Gruvbox-styled floating bubble onto your screen.
+**bDoci** solves that by turning documentation into a compact native Android experience. It lets users browse cached technical notes, open rich detail views, highlight code, share documents through QR-based deep links, and even access content through a floating overlay while using other apps.
 
-- Watching a programming tutorial on YouTube? Tap the bubble to expand a transparent mini-panel over your video.
-- Instantly search your knowledge base, copy a code snippet to your clipboard, and dismiss the panel without ever pausing your video or leaving the app you are in.
+---
 
-### 📡 Offline P2P Sync (QR Deep-Linking)
+## ✨ Features
 
-bDoci breaks the barrier of internet dependency with its **Offline Peer-to-Peer Sharing**.
+| Feature | Description |
+| --- | --- |
+| **Offline-First Reading** | Cached documents remain available through Room Database, so important references stay accessible without internet. |
+| **Floating Overlay Panel** | A native `SYSTEM_ALERT_WINDOW` service provides quick access to documentation on top of other apps. |
+| **QR-Based Sharing** | Documents can be serialized into a `bdoci://share` deep link and exchanged offline through QR codes. |
+| **Push Updates with FCM** | Firebase Cloud Messaging enables real-time update notifications without constant polling. |
+| **Category Filtering & Search** | Browse documents faster with category pills, favorites, and in-app filtering. |
+| **Code-Friendly Reading UI** | Dedicated reading surfaces and styled code containers improve technical content readability on mobile. |
+| **Favorites System** | Frequently used documents can be pinned locally for quick repeat access. |
+| **Connectivity Awareness** | Network state checks help the app adapt between live data and local cache smoothly. |
 
-- Find a vital algorithm while completely offline? Tap "Share" to serialize the document into a Base64-encoded JSON payload, which is instantly converted into a custom `bdoci://share` QR code.
-- A teammate scans the code using their native camera. Android's Intent system catches the deep link, launches bDoci, decodes the payload, and injects the document directly into their local Room Database.
+---
 
-### 🔔 Real-Time Push Notifications
+## 🎯 Why bDoci
 
-Integrated with **Firebase Cloud Messaging (FCM)**, the app utilizes a silent, event-driven server-side push architecture. The exact millisecond a new note is uploaded to the MongoDB backend via the web dashboard, an FCM `data` payload is broadcasted, instantly triggering a native Android notification on your device with zero battery drain or background polling.
+Most developer note apps stop at basic text storage. bDoci is built around actual usage during learning and coding:
 
-### 🎨 Custom "Gruvbox-Chic" Aesthetic
+- Read technical content cleanly on mobile without relying on a browser tab jungle.
+- Keep important references available when connectivity is unreliable.
+- Pull documentation into a floating panel while watching tutorials or switching apps.
+- Share docs directly between devices with QR-based deep links.
 
-Moving away from the harsh glaring whites of standard Material Design, bDoci utilizes a warm, high-end, custom UI.
+---
 
-- **Floating UI:** Document cards and search bars feature deep rounded corners and soft elevation shadows, creating a "floating" layered effect.
-- **Code Containers:** Code snippets are housed in deep, warm dark `#282828` containers, ensuring monospace syntax pops beautifully without straining the eyes.
-- **Dynamic Sidebar:** A scrollable, pill-shaped side navigation bar allows users to instantly filter their cached knowledge base by tags (e.g., C++, Java, Linux).
+## 📸 App Preview
 
-### 🗃️ True Offline-First Architecture
-
-- Powered by an SQLite-abstracted **Room Database**, every document fetched from the live backend is intelligently cached.
-- Custom `NetworkUtils` passively monitor connectivity. If you open the app without Wi-Fi, bDoci instantly falls back to your local cache. A dynamic **Offline Status Indicator** seamlessly updates the UI to reflect your connection state.
-
-### 🔎 Dynamic Text Scaling (Precision Slider)
-
-- Reading dense technical documentation on a mobile screen can quickly cause eye strain. bDoci solves this with an intuitive, built-in zoom slider directly accessible within the reading view. Users can dynamically and smoothly scale the font size of complex algorithms and detailed explanations on the fly using the slider, ensuring maximum readability without ever having to dig through a settings menu.
-
-### 🌈 Native Offline Syntax Highlighting
-
-- Say goodbye to flat, plain-text code blocks. The dedicated code viewer features a built-in, completely offline syntax highlighting engine. It automatically detects the document's programming language (C++, Python, Java, etc.) and color-codes the logic to match professional IDE environments, housed beautifully within our custom Gruvbox dark containers.
-
-### 📊 Dynamic Reading Progress Slider
-
-- Never lose your place in a massive documentation file or extensive tutorial. A sleek, unobtrusive reading progress indicator sits at the edge of the reading screen. It updates in real-time as you scroll through the `RecyclerView` or text blocks, providing immediate visual feedback on your exact position within the document.
-
-### 📡 Offline P2P Sync (QR Deep-Linking)
-
-- bDoci breaks the barrier of internet dependency with its flagship offline sharing. Find a vital code snippet while disconnected? Tap "Share" to serialize the document into a Base64-encoded JSON payload, which is instantly converted into a custom `bdoci://share` QR code. A teammate can scan the code using their native camera, and Android's Intent system will catch the deep link, launch bDoci, and inject the document directly into their local Room Database. True zero-network collaboration.
-
-## ⭐ Personalized Offline Favorites
-
-- Scrolling through a growing knowledge base to find your most frequently used code snippets is inefficient. bDoci features a robust, locally cached Favorites system powered by a dedicated Room Database entity. Users can instantly "Star" any document to pin it to a dedicated Quick Access category on their dashboard. Because this user preference layer is completely decoupled from the remote server and stored offline, your pinned snippets are securely preserved and instantly available, regardless of backend network updates or internet connectivity.
-
-## 📸 Sample Screens
+The sample screenshots are part of the project story, so they are kept here as a proper visual walkthrough of the app.
 
 <p align="center">
-  <img src="Sample/Screenshot_20260422_215212_bDoci.jpg" alt="bDoci dashboard screen" width="220" />
-  <img src="Sample/Screenshot_20260422_215224_bDoci.jpg" alt="bDoci category filter screen" width="220" />
-  <img src="Sample/Screenshot_20260422_215236_bDoci.jpg" alt="bDoci documentation detail screen" width="220" />
-  <img src="Sample/Screenshot_20260422_215245_bDoci.jpg" alt="bDoci QR sharing screen" width="220" />
-  <img src="Sample/Screenshot_20260422_215254_bDoci.jpg" alt="bDoci code viewer screen" width="220" />
+  <img src="Sample/Screenshot_20260422_215212_bDoci.jpg" alt="bDoci dashboard" width="180" />
+  <img src="Sample/Screenshot_20260422_215224_bDoci.jpg" alt="bDoci categories" width="180" />
+  <img src="Sample/Screenshot_20260422_215236_bDoci.jpg" alt="bDoci document detail" width="180" />
+  <img src="Sample/Screenshot_20260422_215245_bDoci.jpg" alt="bDoci QR sharing" width="180" />
+  <img src="Sample/Screenshot_20260422_215254_bDoci.jpg" alt="bDoci code view" width="180" />
 </p>
 
 ---
 
-## 🛠️ Tech Stack & Engineering
+## 🛠️ Tech Stack
 
-bDoci strictly adheres to the **MVVM (Model-View-ViewModel)** architectural pattern, ensuring clean separation of concerns, testability, and a crash-free, lifecycle-aware UI.
+### Android App
 
 - **Language:** Kotlin
-- **Architecture:** MVVM + Single Source of Truth Repository Pattern
-- **Networking:** Retrofit2 & OkHttp3
+- **Architecture:** MVVM + Repository Pattern
+- **UI:** Native Android Views with XML layouts
+- **Build System:** Gradle Kotlin DSL
 - **Local Storage:** Room Database
-- **Asynchronous Execution:** Kotlin Coroutines & `lifecycleScope`
-- **Background Services:** FirebaseMessagingService & Android `WindowManager`
-- **JSON Serialization:** Gson
-- **QR Generation:** ZXing Core
-- **UI Components:** Complex XML Layouts, Customized State Selectors, ConstraintLayouts, and RecyclerViews.
+- **Networking:** Retrofit + Gson
+- **Async Work:** Kotlin Coroutines
+- **Messaging:** Firebase Cloud Messaging
+- **Utilities:** ZXing for QR generation
+
+### Platform Capabilities
+
+- **Deep Links:** Custom `bdoci://share` import flow
+- **Overlay Service:** `WindowManager` + foreground service
+- **Connectivity Handling:** `ACCESS_NETWORK_STATE`
+- **Modern Android Target:** `minSdk 27`, `targetSdk 36`
 
 ---
 
-## 📂 Project Structure
+## 📋 Feature Snapshot
+
+| Area | Included in bDoci |
+| --- | --- |
+| Document browsing | `Yes` |
+| Offline caching | `Yes` |
+| Favorites | `Yes` |
+| Floating overlay access | `Yes` |
+| QR-based local sharing | `Yes` |
+| Firebase notifications | `Yes` |
+| Deep-link document import | `Yes` |
+| Native Android implementation | `Yes` |
+
+---
+
+## 🚀 Quick Start
+
+Follow these steps to run bDoci locally.
+
+### Prerequisites
+
+- Android Studio
+- JDK 11 or higher
+- Android SDK for API 27+
+- A Firebase project for push notification support
+
+### Setup Steps
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/Bimbok/bdoci-app.git
+cd bdoci-app
+
+# 2. Add your Firebase config
+# Place google-services.json inside the app/ directory
+
+# 3. Open the project in Android Studio
+
+# 4. Sync Gradle
+
+# 5. Run on an emulator or physical device
+```
+
+If you do not add `google-services.json`, the project will not build successfully because Firebase Messaging is configured in the app.
+
+### Recommended Test Flow
+
+1. Launch the app and verify the dashboard loads.
+2. Open a document detail screen and test scrolling/readability.
+3. Star a document to confirm favorites persistence.
+4. Test QR sharing/import flow on a second device if available.
+5. Grant overlay permission and verify the floating service behavior.
+
+---
+
+## 🏗️ Architecture
+
+bDoci is organized around a straightforward native Android MVVM flow where data retrieval, caching, and presentation stay clearly separated.
 
 ```text
-com.example.bdoci
-│
-├── app/                  # Main BDociApp Initialization
-├── database/             # Offline Caching (AppDatabase, DocDao)
-├── models/               # Serialized Data classes (Doc.kt)
-├── network/              # Retrofit routing & Firebase (MyFirebaseMessagingService)
-├── repository/           # Single source of truth (DocRepository)
-├── utils/                # Helper singletons (NetworkUtils, QRUtils)
-├── viewmodels/           # Lifecycle-aware logic (DocViewModel)
-│
-├── Dashboard.kt          # Main List, Search, Category Filtering & Deep Links
-├── DocDetailActivity.kt  # Document Reader & QR Generation
-├── FloatingDocService.kt # WindowManager Service for the PiP Widget
-├── DocAdapter.kt         # Adapter for floating document cards
-└── CategoryAdapter.kt    # Adapter for sidebar navigation pills
+app/src/main/java/com/example/bdoci/
+├── app/                  # Application class and startup initialization
+├── database/             # Room database and DAO layer
+├── models/               # Document and favorites models
+├── network/              # Retrofit client, API service, FCM service
+├── repository/           # Data coordination between network and local cache
+├── utils/                # Network and QR helpers
+├── viewmodels/           # UI-facing business logic
+├── Dashboard.kt          # Main document listing and category filtering
+├── DocDetailActivity.kt  # Reader screen and share actions
+├── FloatingDocService.kt # Floating overlay experience
+├── DocAdapter.kt         # Document list adapter
+└── CategoryAdapter.kt    # Category navigation adapter
+```
+
+### How It Works
+
+1. **Data Fetching:** Retrofit retrieves documentation from the remote source.
+2. **Caching:** Room persists documents and favorites for offline access.
+3. **Presentation:** Activities, adapters, and view models render filtered document views.
+4. **Sharing:** QR utilities package document data into a custom deep link format.
+5. **Overlay Access:** The floating service exposes quick access without leaving the current app.
+
+### Core Modules
+
+- **Dashboard:** Entry point for category browsing, search, and filtered discovery.
+- **Doc Detail:** Reading screen for content consumption, sharing, and focused access.
+- **Favorites Layer:** Local persistence for quick retrieval of high-value documents.
+- **Floating Service:** Overlay-first access path for multitasking workflows.
+- **Push Layer:** Firebase-backed notifications for newly available content.
+
+### System Flow
+
+```mermaid
+flowchart TD
+    user[User]
+    dashboard[Dashboard UI]
+    repo[DocRepository]
+    api[Remote API]
+    db[Room Database]
+    detail[Document Detail View]
+    qr[QR Share Utility]
+    overlay[Floating Overlay Service]
+
+    user --> dashboard
+    dashboard --> repo
+    repo --> api
+    repo --> db
+    db --> dashboard
+    dashboard --> detail
+    detail --> qr
+    detail --> overlay
+    qr --> user
+    overlay --> user
 ```
 
 ---
 
-## 🚀 Getting Started
+## 🤝 Contributing
 
-### Prerequisites
+Contributions are welcome if you want to improve the reading experience, add new capabilities, or strengthen the Android architecture.
 
-- Android Studio (Latest Version)
-- Minimum SDK: API 27 (Android 8.1)
-- Target SDK: API 36
+1. Fork the repository.
+2. Create a feature branch from `main`.
+3. Make your changes with clear commits.
+4. Test on a device or emulator.
+5. Open a Pull Request with a concise description of the change.
 
-### Installation
+For project standards and collaboration details, check [LICENSE](LICENSE) and the repository guidelines you maintain alongside the codebase.
 
-1. **Clone the repository:**
+### Good Contribution Areas
 
-   ```bash
-   git clone https://github.com/Bimbok/bdoci-app.git
-   ```
-
-2. **Firebase Setup (Crucial):**
-   - This project requires a `google-services.json` file to compile successfully due to the FCM integration.
-   - Create a Firebase Project, register your Android App with the matching Application ID, download the `google-services.json` file, and place it inside the `/app` directory. _(Note: This file is intentionally `.gitignore`d for security)._
-
-3. **Open & Sync:** Open the project in Android Studio. Wait for Gradle to sync dependencies.
-4. **Run:** Select your target emulator or physical device and run the application.
-
-_Note: This mobile app is designed as a highly optimized, read-only client. Documentation authoring, Markdown formatting, and database administration are handled exclusively via the accompanying Node.js web dashboard._
+- UI polish and reading ergonomics
+- Better offline-sync and import/export behavior
+- Performance improvements for large document lists
+- More resilient deep-link and QR handling
+- Test coverage for repository and database behavior
 
 ---
 
-## 👨‍💻 Developed By
+## 📞 Contact
 
-    **Bimbok** _Architected and developed as a comprehensive mobile companion for high-performance developer workflows._
+For issues, ideas, or collaboration:
+
+- **GitHub:** [@Bimbok](https://github.com/Bimbok)
+- **Issues:** Open a ticket in this repository
+
+---
+
+## 📄 License
+
+Released under the [MIT License](LICENSE).
+
+<p align="center">Built for developers who want their docs available anywhere.</p>

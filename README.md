@@ -238,9 +238,9 @@ Contributions are welcome if you want to improve the reading experience, add new
 2. Create a feature branch from `main`.
 3. Make your changes with clear commits.
 4. Test on a device or emulator.
-5. Open a Pull Request with a concise description of the change.
+5. Open a pull request with a concise description of the change.
 
-For project standards and collaboration details, check [LICENSE](LICENSE) and the repository guidelines you maintain alongside the codebase.
+For project standards and collaboration details, check [CONTRIBUTING.md](CONTRIBUTING.md), [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md), [SECURITY.md](SECURITY.md), and [LICENSE](LICENSE).
 
 ### Good Contribution Areas
 
@@ -257,7 +257,8 @@ For project standards and collaboration details, check [LICENSE](LICENSE) and th
 For issues, ideas, or collaboration:
 
 - **GitHub:** [@Bimbok](https://github.com/Bimbok)
-- **Issues:** Open a ticket in this repository
+- **Issues:** Use this repository's GitHub issue tracker
+- **Support:** See [SUPPORT.md](SUPPORT.md)
 
 ---
 

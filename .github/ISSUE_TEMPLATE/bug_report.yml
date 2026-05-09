@@ -1,0 +1,88 @@
+name: Bug Report
+description: Report a reproducible problem in bDoci
+title: "[Bug]: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting a bug. Please provide enough detail to reproduce and verify the problem.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: Briefly describe the problem.
+      placeholder: The floating panel closes immediately after opening on Android 14.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: List the exact steps needed to reproduce the issue.
+      placeholder: |
+        1. Open the app
+        2. Grant overlay permission
+        3. Start the floating service
+        4. Tap the bubble
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What should have happened?
+      placeholder: The floating panel should remain visible and interactive.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What happened instead?
+      placeholder: The panel flashes for a moment and then disappears.
+    validations:
+      required: true
+
+  - type: input
+    id: app_version
+    attributes:
+      label: App Version
+      description: Which app version are you using?
+      placeholder: 3.8.5
+
+  - type: input
+    id: android_version
+    attributes:
+      label: Android Version
+      description: Which Android version is affected?
+      placeholder: Android 14
+
+  - type: input
+    id: device
+    attributes:
+      label: Device
+      description: Which device or emulator did you test on?
+      placeholder: Pixel 7 / Android Emulator
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs or Screenshots
+      description: Add relevant logs, stack traces, or screenshots if available.
+      render: shell
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I searched existing issues before opening this report.
+          required: true
+        - label: I can reproduce this issue on the current codebase.
+          required: true

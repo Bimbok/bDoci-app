@@ -1,0 +1,52 @@
+name: Feature Request
+description: Suggest an improvement or new feature for bDoci
+title: "[Feature]: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting an improvement. Focus on the user problem first, then the proposed solution.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: What problem or limitation are you facing?
+      placeholder: It is hard to resume reading long documents from the last position.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed Solution
+      description: Describe the improvement you want.
+      placeholder: Persist reading position per document and restore it automatically.
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Describe any alternative solutions or workarounds you considered.
+      placeholder: A manual bookmark option in the detail screen.
+
+  - type: textarea
+    id: impact
+    attributes:
+      label: Expected Impact
+      description: Who benefits and how?
+      placeholder: Improves usability for users reading long offline documentation.
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I searched existing issues and feature requests first.
+          required: true
+        - label: This request is focused on a specific improvement.
+          required: true
